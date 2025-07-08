@@ -9,6 +9,7 @@ function logger(req,res,next){
     next()
 }
 
+server.use(expres.json())
 server.use(logger)
 //GETS==============================================================================
 server.get('/greet/:name',(req,res)=>{
@@ -41,7 +42,12 @@ server.get('/greet',(req,res)=>{
 //POSTS-------------------------------------------------------------------------------------------
 
 server.post('/action',(req,res)=>{
-    
+    if(req.body.action === 'joke'){
+        res.end('sucess')
+    }
+    else{
+        res.end('hgd')
+    }
 })
 
 server.listen(PORT,()=>console.log(`server listening on port ${PORT}`))
