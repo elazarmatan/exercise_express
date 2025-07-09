@@ -41,12 +41,25 @@ server.get('/greet',(req,res)=>{
 
 //POSTS-------------------------------------------------------------------------------------------
 
-server.post('/action',(req,res)=>{
+const X_API_KEY = 'live_fEWiKXGOrJxE9rG4ES9KKWFVyfsIryH1hnWA6vfwrtEqesiUqupKSj6Quf10TDps'
+
+server.post('/action',async (req,res)=>{
     if(req.body.action === 'joke'){
-        res.end('sucess')
+        const response = await fetch('https://official-joke-api.appspot.com/random_joke')
+        const data = await response.json()
+        const fullJoke = `${data.setup} ${data.punchline}`
+        res.json({"joke":fullJoke})
+    }
+    else if(req.body.action === 'cat fact'){
+        const response = await fetch('https://api.thecatapi.com/v1/images/search?limit=11',{headers:{
+            'x-api-key':X_API_KEY
+        }})
+        const data = await response.json()
+        res.json({"length":data.length})
     }
     else{
-        res.end('hgd')
+        res.status(400)
+        res.json({ "msg": "body is malformed" })
     }
 })
 
